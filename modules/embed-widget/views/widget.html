@@ -1,0 +1,31 @@
+{% if data.widget.aposPlaceholder and data.manager.options.placeholderUrl %}
+  <div
+    data-embed-ext-widget
+    data-embed-ext-url="{{ data.manager.options.placeholderUrl }}"
+  >
+  </div>
+{% else %}
+  {% if data.options.className %}
+    {% set className = data.options.className %}
+  {% elif data.manager.options.className %}
+    {% set className = data.manager.options.className %}
+  {% endif %}
+
+  {# Handling for generic extended embed content #}
+  {% if data.widget.content %}
+    <div
+      {% if className %} class="{{ className }}"{% endif %}
+      data-embed-ext-widget
+      data-embed-ext-url="{{ data.widget.content.url }}"
+    >
+      {% if data.widget.content.thumbnail %}
+      <img src="{{ data.widget.content.thumbnail }}" alt="Preview"/>
+      {% else %}
+      {# Render the oEmbed HTML or a placeholder if available #}
+      {{ data.widget.content.html | safe }}
+      {% endif %}
+    </div>
+  {% elif data.user %}
+    <p {% if data.manager.options.className %} class="{{ data.manager.options.className }} {{ data.manager.options.className }}--error"{% endif %}>No content selected</p>
+  {% endif %}
+{% endif %}
